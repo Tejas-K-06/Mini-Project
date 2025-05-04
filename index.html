@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Word Counter</title>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900' rel='stylesheet' type='text/css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="description"
+        content="An advanced word counter tool with text analysis, reading time estimation, readability scoring, and text formatting options.">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-keyboard logo-icon"></i>
+                Word Counter
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#counter-tab" class="nav-link active" data-tab="counter">Counter</a></li>
+                    <li><a href="#tools-tab" class="nav-link" data-tab="tools">Text Tools</a></li>
+                    <li><a href="#about-tab" class="nav-link" data-tab="about">About</a></li>
+                    <li>
+                        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <div class="container">
+            <h1>Word Counter</h1>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="counter">Word Counter</div>
+                <div class="tab" data-tab="tools">Text Tools</div>
+                <div class="tab" data-tab="settings">Settings</div>
+                <div class="tab" data-tab="about">About</div>
+            </div>
+
+            <!-- Counter Tab Content -->
+            <div class="tab-content active" id="counter-tab">
+                <!-- Text control buttons -->
+                <div class="controls">
+                    <button class="control-btn" id="clearBtn">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                    <button class="control-btn" id="copyBtn">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                    <button class="control-btn" id="downloadBtn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="control-btn" id="saveBtn">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+
+                <!-- Text area with character limit indicator -->
+                <div class="editor-container">
+                    <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+                    <div class="char-limit" id="charLimit">0/5000</div>
+                </div>
+
+                <!-- Stats cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">Characters</div>
+                        <div class="stat-value" id="characterCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Words</div>
+                        <div class="stat-value" id="wordCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Sentences</div>
+                        <div class="stat-value" id="sentenceCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Paragraphs</div>
+                        <div class="stat-value" id="paragraphCount">0</div>
+                    </div>
+                </div>
+
+                <!-- Legacy output rows for backward compatibility -->
+                <div class="output row">
+                    <div>Reading Time: <span id="readingTime">0</span></div>
+                    <div id="readability">Check readability score</div>
+                </div>
+
+                <!-- Word frequency analysis -->
+                <div class="keywords">
+                    <div class="keywords-title">
+                        <i class="fas fa-chart-bar"></i> Top Keywords
+                    </div>
+                    <ul id="topKeywords"></ul>
+                </div>
+
+                <!-- Word cloud visualization -->
+                <div class="word-cloud-container" id="wordCloud">
+                    <!-- Word cloud will be rendered here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Text Tools Tab Content -->
+            <div class="tab-content" id="tools-tab">
+                <div class="text-tools">
+                    <button class="tool-btn" id="uppercaseBtn">
+                        <i class="fas fa-arrow-up"></i> UPPERCASE
+                    </button>
+                    <button class="tool-btn" id="lowercaseBtn">
+                        <i class="fas fa-arrow-down"></i> lowercase
+                    </button>
+                    <button class="tool-btn" id="capitalizeBtn">
+                        <i class="fas fa-font"></i> Capitalize Words
+                    </button>
+                    <button class="tool-btn" id="sentenceCaseBtn">
+                        <i class="fas fa-align-left"></i> Sentence case
+                    </button>
+                    <button class="tool-btn" id="removeSpacesBtn">
+                        <i class="fas fa-compress"></i> Remove Extra Spaces
+                    </button>
+                    <button class="tool-btn" id="sortLinesBtn">
+                        <i class="fas fa-sort-alpha-down"></i> Sort Lines
+                    </button>
+                    <button class="tool-btn" id="reverseBtn">
+                        <i class="fas fa-exchange-alt"></i> Reverse Text
+                    </button>
+                    <button class="tool-btn" id="findReplaceBtn">
+                        <i class="fas fa-search"></i> Find & Replace
+                    </button>
+                </div>
+
+                <div class="find-replace-container" style="display: none; margin: 1rem 0;">
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" id="findInput" placeholder="Find text..." style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                        <input type="text" id="replaceInput" placeholder="Replace with..." style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                    </div>
+                    <button class="tool-btn" id="performReplaceBtn" style="width: 100%;">Replace All</button>
+                </div>
+            </div>
+
+            <!-- Settings Tab Content -->
+            <div class="tab-content" id="settings-tab">
+                <div style="margin: 1rem 0;">
+                    <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;">Counter Settings</h3>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Character Limit</label>
+                        <input type="number" id="charLimitSetting" value="5000" min="100" max="50000" step="100" style="padding: 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Reading Speed (WPM)</label>
+                        <input type="number" id="readingSpeedSetting" value="275" min="100" max="800" step="5" style="padding: 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                        <span style="display: block; font-size: 0.8rem; color: #6b7280; margin-top: 5px;">Words per minute (average adult: 250-300)</span>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="showWordCloudSetting">
+                            <span>Show Word Cloud</span>
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="autosaveSetting">
+                            <span>Enable Autosave</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- About Tab Content -->
+            <div class="tab-content" id="about-tab">
+                <div class="about-content">
+                    <h2><strong>About Word Counter</strong></h2>
+                    <p>This is a mini project made by Tejas Kadam from COEP Technological University Pune</p>
+                    <p>Word Counter is a powerful text analysis tool designed to help writers, students, and professionals improve their writing.</p>
+                    
+                    <h3>Features</h3>
+                    <ul>
+                        <li><strong>Word and Character Counting:</strong> Get accurate counts of words, characters, sentences, and paragraphs.</li>
+                        <li><strong>Reading Time Estimation:</strong> Know how long it will take to read your text.</li>
+                        <li><strong>Readability Analysis:</strong> Check the reading level of your text.</li>
+                        <li><strong>Keyword Analysis:</strong> Identify the most used words in your text.</li>
+                        <li><strong>Word Cloud:</strong> Visualize word frequency in an interactive word cloud.</li>
+                        <li><strong>Text Formatting Tools:</strong> Change case, remove extra spaces, sort lines, and more.</li>
+                    </ul>
+                    
+                    <h3>Why Use Word Counter?</h3>
+                    <p>Whether you're writing essays, blog posts, articles, or social media content, Word Counter helps you:</p>
+                    <ul>
+                        <li>Meet word count requirements for assignments</li>
+                        <li>Improve readability by analyzing sentence structure</li>
+                        <li>Identify overused words and improve vocabulary diversity</li>
+                        <li>Format text quickly with our text tools</li>
+                        <li>Save and track your writing progress</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="footer-title">Word Counter</div>
+                <p>A powerful text analysis tool designed to help you count words, characters, and more. Perfect for writers, students, and professionals.</p>
+            </div>
+            <div class="footer-section">
+                <div class="footer-title">Quick Links</div>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#counter-tab" data-tab="counter">Home</a></li>
+                    <li class="footer-link"><a href="#tools-tab" data-tab="tools">Text Tools</a></li>
+                    <li class="footer-link"><a href="#about-tab" data-tab="about">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <div class="footer-title">Text Tools</div>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#counter-tab" data-tab="counter">Word Counter</a></li>
+                    <li class="footer-link"><a href="#tools-tab" data-tab="tools">Case Converter</a></li>
+                    <li class="footer-link"><a href="#tools-tab" data-tab="tools">Text Formatter</a></li>
+                    <li class="footer-link"><a href="#counter-tab" data-tab="counter">Character Counter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <h2>© Tejas Kadam - 612415074.</h2>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>
