@@ -29,7 +29,7 @@ Mini-Project/
 ├── style.css
 ├── script.js
 └── README.md
-
+```
 ## Opening the page
 visit `https://tejas-k-06.github.io/Mini-Project/
 or clone the repo
